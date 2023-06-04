@@ -7,7 +7,7 @@ const App = () => {
   const [movies, setMovies] = useState([]);
   const [searchTitle, setSearchTitle] = useState("");
   const [sortBy, setSortBy] = useState("ascending");
-  const [selectedMovie, setSelectedMovie] = useState("");
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   // Sorting Movies by Release Year Logic
   const sortedMovies = useMemo(() => {
@@ -25,19 +25,39 @@ const App = () => {
         return second - first;
       }
     });
-  }, [movies, sortBy])
-
+  }, [movies, sortBy]);
+  const handleSort = () => {
+    const sortedList = sortedMovies;
+    console.log(sortedList);
+    setSortBy((prev) => {
+      if(prev === "ascending") {
+        return "descending";
+      }
+      return "ascending";
+    });
+  };
+  useEffect(() = {
+    console.log("movies modified",movies);
+}, [movies]);
+            
   return (
     <div id="main">
       <h1>Movie Search</h1>
-      <SearchBar />
-      <button className="sort-btn">Sort Movies by release year ({sortBy})</button>
-      <MoviesList />
+      <SearchBar setMovies = {setMovies} />
+      <button onClick={handleSort} className="sort-btn">
+        Sort Movies by release year ({sortBy})
+</button>
+      <MoviesList setSelectedMovie={setSelectedMovie} movies={movies} />
+        {selectedMovie && (
       <section className='movie-details'>
         <MovieDetails />
+         setSelectMovie={setSelectedMovie}
+         selectedMovie={selectedMovie}
+        />
       </section>
+})
     </div>
-  )
-}
+  );
+};
 
 export default App;
